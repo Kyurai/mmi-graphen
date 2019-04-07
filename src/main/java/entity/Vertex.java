@@ -40,7 +40,6 @@ public class Vertex {
      * @return number of edges
      */
     public int countEdges() {
-        int numberEdges = this.edges.size();
-        return numberEdges;
+        return this.edges.size();
     }
 }
