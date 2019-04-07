@@ -4,13 +4,12 @@ import entity.Edge;
 import entity.Graph;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 /**
  * Class with static methods to import and
@@ -19,50 +18,52 @@ import java.util.stream.Stream;
 public class GraphImporter {
 
     /**
-     * Creates a {@link Graph} from given file
-     * <p>
-     * File format:
-     * <p>
-     * Line 0:      Number of vertices (int)
-     * Line 1-n:    Edges with origin (int) and destination (int)
+     * Import graph from graph.txt
      *
-     * @param pathToFile path to graph file
+     * @param pathToFile path to txt.file
+     * @param directed   if directed is chosen, the edge is just placed on the origin vertex
+     *                   if not directed is chosen, the edge is placed on both the origin and the destination vertices
+     * @return Graph
      */
-    public static Graph loadGraphFromFile(String pathToFile) throws IOException, IllegalArgumentException {
+    public static Graph readEdgeListFromFile(final String pathToFile, boolean directed) {
 
-        try (Stream<String> stream = Files.lines(Paths.get(pathToFile))) {
-            List<String> lines = stream.collect(Collectors.toList());
+        Graph graph = new Graph();
+        try {
+            final FileReader fileReader = new FileReader(pathToFile);
+            final BufferedReader reader = new BufferedReader(fileReader);
 
-            //read first line to get number of vertices
-            String s = lines.remove(0);
-            List<Integer> values = extractValues(s);
-            if (values.size() != 1) {
-                throw new IllegalArgumentException("The first line in file should only contain one value !");
-            }
-            int numberVertices = values.get(0);
-
-            //Create all vertices
-            Graph graph = new Graph();
+            String firstLine = reader.readLine();
+            int numberVertices = Integer.parseInt(firstLine);
             for (int i = 0; i < numberVertices; i++) {
                 graph.addVertex(i);
             }
 
-            //read other lines to add edges
-            while (lines.size() > 0) {
-                List<Integer> edgeValues = extractValues(lines.remove(0));
-                if (edgeValues.size() != 2) {
-                    throw new IllegalArgumentException("Edges can only consist out of two values");
-                }
+            final String delimiter = "\t";
+            String currentLine;
+            while ((currentLine = reader.readLine()) != null) {
+                final String[] points = currentLine.split(delimiter);
+                final int p1 = Integer.parseInt(points[0]);
+                final int p2 = Integer.parseInt(points[1]);
 
-                int originId = edgeValues.get(0);
-                int destinationId = edgeValues.get(1);
-                Edge edge = new Edge(destinationId);
-                graph.getVertex(originId).addEdge(edge);
+                if (!directed) {
+                    Edge e = new Edge(graph.getVertex(p1), graph.getVertex(p2));
+                    graph.getVertex(p1).addEdge(e);
+                    graph.getVertex(p2).addEdge(e);
+                } else {
+                    graph.getVertex(p1).addEdge(new Edge(graph.getVertex(p1), graph.getVertex(p2)));
+                    graph.getVertex(p2).addEdge(new Edge(graph.getVertex(p2), graph.getVertex(p1)));
+                }
             }
 
-            return graph;
+            reader.close();
+            fileReader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return graph;
     }
+
 
     /**
      * Splits the inputted line into single values

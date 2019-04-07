@@ -9,10 +9,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Edge {
 
-    private int destinationId;
+    private Vertex originId;
+    private Vertex destinationId;
     private double cost;
 
-    public Edge(int destinationId) {
+    public Edge(Vertex originId, Vertex destinationId) {
+        this.originId = originId;
         this.destinationId = destinationId;
         this.cost = 0.0;
     }

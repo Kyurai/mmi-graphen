@@ -3,7 +3,6 @@ import input.GraphImporter;
 import startup.AsciiGenerator;
 
 import java.awt.*;
-import java.io.IOException;
 
 public class Main {
 
@@ -15,15 +14,11 @@ public class Main {
 
 
         //Importing graph and measuring time
-        String path = "C:\\Users\\Dustin\\Downloads\\FH Aachen\\Mathe\\Graph_ganzgross.txt";
+        String path = "C:\\Users\\Dustin\\Downloads\\FH Aachen\\Mathe\\Graph_ganzganzgross.txt";
         long startTime = System.currentTimeMillis();
         Graph graph = null;
-        try {
-            System.out.println("Starting import of graph...");
-            graph = GraphImporter.loadGraphFromFile(path);
-        } catch (IOException e) {
-            System.out.println("Error while importing graph from: " + path);
-        }
+        System.out.println("Starting import of graph...");
+        graph = GraphImporter.readEdgeListFromFile(path, false);
         long estimatedTime = System.currentTimeMillis() - startTime;
         System.out.println("Importing graph took: " + estimatedTime + " ms");
 

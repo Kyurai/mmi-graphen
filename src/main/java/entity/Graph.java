@@ -29,12 +29,6 @@ public class Graph {
      * @param id of vertex to add
      */
     public void addVertex(int id) {
-
-//        if (!vertices.containsKey(id)) {
-//            vertices.put(id, new Vertex(id));
-//        } else {
-//            System.out.println("Error: Vertex with id: " + id + " already exists!");
-//        }
         vertices.put(id, new Vertex(id));
     }
 

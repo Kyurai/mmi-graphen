@@ -30,27 +30,7 @@ public class Vertex {
      * false, if edge already exists
      */
     public boolean addEdge(Edge edge) {
-//        if (!this.edges.contains(edge)) {
-//            return this.edges.add(edge);
-//        }
-//        return false;
         return this.edges.add(edge);
-    }
-
-    /**
-     * Removes an edge from the edges list
-     *
-     * @param edge contains the id of the destination vertex
-     * @return true, if removing was successfull,
-     * false, if removing was not successfull
-     */
-    public boolean removeEdge(Edge edge) {
-        return this.edges.remove(edge);
-    }
-
-    public boolean removeEdge(int id) {
-        Edge e = new Edge(id);
-        return removeEdge(e);
     }
 
     /**
@@ -61,12 +41,6 @@ public class Vertex {
      */
     public int countEdges() {
         int numberEdges = this.edges.size();
-//        for (Edge e : edges) {
-//            if (e.getDestinationId() == id) {
-//                numberEdges++;
-//                break;
-//            }
-//        }
         return numberEdges;
     }
 }
